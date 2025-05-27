@@ -82,22 +82,22 @@ int main(void)
 			}
 		}
 		draw_board();
-		game_message(gameover, game_logic);
 		if (draw)
 		{
 			if (turn == 0) {
 				set_graphics_x_o(posX, posY, game_logic, turn);
 			}
-			if (turn == 1) {
-				while (turn == 1) {
-					int posx = rand() % 640;
-					int posy = rand() % 375;
-					set_graphics_x_o(posx, posy, game_logic, turn);
-				}
-			}
 			draw = false;
 		}
+		game_message(gameover, game_logic);
 		al_flip_display();
+		if (turn == 1 && !gameover && !done) {
+			while (turn == 1) {
+				int posx = rand() % 640;
+				int posy = rand() % 375;
+				set_graphics_x_o(posx, posy, game_logic, turn);
+			}
+		}
 	}
 	al_rest(5.0);
 	al_destroy_event_queue(event_queue);
