@@ -4,9 +4,10 @@
 #include <allegro5\allegro_primitives.h>	
 #include <allegro5\allegro_native_dialog.h> 
 #include "logic.h"
+#include <time.h>
 
 
-void set_graphics_x_o(int x, int y, logic &game_logic);
+void set_graphics_x_o(int x, int y, logic &game_logic, int turn);
 void draw_board();
 void draw_x(int x, int y);
 void draw_o(int x, int y);
@@ -20,6 +21,7 @@ int main(void)
 	bool gameover = false;
 	ALLEGRO_DISPLAY *Screen = NULL;
 	int width = 640, height = 480;
+	static int turn = 0;
 
 	if (!al_init())
 	{
@@ -82,9 +84,17 @@ int main(void)
 		game_message(gameover, game_logic);
 		if (draw)
 		{
-
-			set_graphics_x_o(posX, posY, game_logic);
-
+			if (turn == 0) {
+				set_graphics_x_o(posX, posY, game_logic, turn);
+				turn = 1;
+			}
+			if (turn == 1) {
+				srand(time(0));
+				int randx = rand() % 640;
+				int randy = rand() % 375;
+				set_graphics_x_o(randx, randy, game_logic, turn);
+				turn = 0;
+			}
 			draw = false;
 		}
 		al_flip_display();
@@ -139,9 +149,8 @@ void turn_xo(int x, int y, int &turn, int boardx, int boardy, logic  &game_logic
 		}
 	}
 }
-void set_graphics_x_o(int x, int y, logic &game_logic)
+void set_graphics_x_o(int x, int y, logic &game_logic, int turn)
 {
-	static int turn = 0;
 	if ((x<213) && (y<125))
 	{
 		turn_xo(106, 62, turn, 0, 0, game_logic);
